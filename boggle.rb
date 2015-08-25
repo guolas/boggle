@@ -91,14 +91,17 @@ end
 
 # ------------------------------------------------------------------------------
 # Function to find a word, starting with a letter
-def find_word(letters, mask, target_word, idx, adj_matrix)
+def find_word(letters, unused, mask, target_word, idx, adj_matrix)
   0.upto mask.length do |letter_idx|
-    if (mask[letter_idx] == 1 and (letters[letter_idx] == target_word[idx]))
-      if idx = target_word.length - 1
+    if (mask[letter_idx] and
+        unused[letter_idx] and
+        (letters[letter_idx] == target_word[idx]))
+      if idx == target_word.length - 1
         return true
       else
-        return find_word(letters, adj_matrix[letter_idx], target_word, idx + 1,
-                         adj_matrix)
+        unused[letter_idx] = false
+        return find_word(letters, unused, adj_matrix[letter_idx],
+                         target_word, idx + 1, adj_matrix)
       end
     end
   end
@@ -137,31 +140,39 @@ File.new('./4x4_board.txt', 'r').readlines.each do |line|
   letters.concat(line.strip.split(','))
 end
 
-if false
+if true
 # ------------------------------------------------------------------------------
   # Check if a word is in the board
-  word_to_check = 'alien'
+  word_to_check = 'asa'
+  unused = Array.new(16, true)
+  mask = Array.new(16, true)
+  puts "The word #{word_to_check} is present?"
+  puts find_word(letters, unused, mask, word_to_check, 0, adjacency_matrix)
 
   # Now use the function defined
   File.new('./4x4_words.txt', 'r').readlines.each do |word|
-    mask = Array.new(16, 1)
-    puts find_word(letters, mask, word, 0, adjacency_matrix)
+    unused = Array.new(16, true)
+    mask = Array.new(16, true)
+    puts find_word(letters, unused, mask, word.strip, 0, adjacency_matrix)
   end
 end
 
+if false
 # ------------------------------------------------------------------------------
-# Find in the board all possible words contained in a dictionary
+  # Find in the board all possible words contained in a dictionary
 
-# First read the contents from the dictionary, and build the Trie from it
-trie = Trie.new
-File.new('./word.list', 'r').readlines.each do |word|
-# File.new('./small.words', 'r').readlines.each do |word|
-  trie.put(word.strip)
-end
+  # First read the contents from the dictionary, and build the Trie from it
+  trie = Trie.new
+  File.new('./word.list', 'r').readlines.each do |word|
+    # File.new('./small.words', 'r').readlines.each do |word|
+    trie.put(word.strip)
+  end
 
-aa = trie.get('alien')
-if aa.nil?
-  puts "nil!!!!"
-else
-  puts aa
+  aa = trie.get('alien')
+  if aa.nil?
+    puts "nil!!!!"
+  else
+    puts aa
+  end
+
 end
