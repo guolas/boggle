@@ -140,7 +140,7 @@ File.new('./4x4_board.txt', 'r').readlines.each do |line|
   letters.concat(line.strip.split(','))
 end
 
-if true
+if false
 # ------------------------------------------------------------------------------
   # Check if a word is in the board
   word_to_check = 'asa'
@@ -157,7 +157,7 @@ if true
   end
 end
 
-if false
+if true
 # ------------------------------------------------------------------------------
   # Find in the board all possible words contained in a dictionary
 
