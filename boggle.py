@@ -61,9 +61,9 @@ class Boggle:
     def find_word(self, target_word):
         mask = [True for ii in self.letters]
         unused = [True for ii in self.letters]
-        return self.find_word_inner(unused, mask, target_word, 0)
+        return self._find_word(unused, mask, target_word, 0)
 
-    def find_word_inner(self, unused, mask, target_word, idx):
+    def _find_word(self, unused, mask, target_word, idx):
         for letter_idx in range(self.number_letters):
             if (mask[letter_idx] and unused[letter_idx] and
                     self.letters[letter_idx] == target_word[idx]):
@@ -71,28 +71,9 @@ class Boggle:
                     return True
                 else:
                     unused[letter_idx] = False
-                    return self.find_word_inner(unused,
+                    return self._find_word(unused,
                             self.adjacency_matrix[letter_idx],
                             target_word, idx + 1)
-
-    """
-    def find_word(self, letters, unused, mask, target_word, idx, adj_matrix):
-
-    0.upto mask.length do |letter_idx|
-        if (mask[letter_idx] and
-                unused[letter_idx] and
-                (letters[letter_idx] == target_word[idx]))
-            if idx == target_word.length - 1
-                return true
-            else
-                unused[letter_idx] = false
-                return find_word(letters, unused, adj_matrix[letter_idx],
-                                                 target_word, idx + 1, adj_matrix)
-            end
-        end
-    end
-    return false
-    """
 
     def get_letters(self, file_name):
         """
